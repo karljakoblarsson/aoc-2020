@@ -19,6 +19,6 @@
 
 ; (defn common-elements [lst] (apply st/intersection (map set lst)))
 
-; (defn partition-by-empty-line [lst]
-;   (remove #(every? empty? %) (partition-by empty? lst))
-;   )
+(defn partition-by-empty-line [lst]
+  (remove #(every? empty? %) (partition-by empty? lst))
+  )
