@@ -93,27 +93,57 @@
 ; (println (time (part1 input)))
 
 
-(defn build-nesting [defs]
-  (tree-seq
-   #(not (empty? (defs (first %))))
-   (fn [k] (defs (first k)))
-   [end-color 0]))
+; (defn build-nesting [defs]
+;   (tree-seq
+;    #(not (empty? (defs (first %))))
+;    (fn [k] (defs (first k)))
+;    [end-color 0]))
+
+; (t1 (first [end-color 0]))
+; (build-nesting t1)
+; (sum (map second (build-nesting t1)))
+
+(defn gather-start [defs]
+  (reduce-kv
+   (fn [acc k v] (if (empty? v) (assoc acc k 1) acc))
+   {}
+   defs))
 
 ; (pp/pprint t1)
-(t1 (first [end-color 0]))
-(build-nesting t1)
-(sum (map second (build-nesting t1)))
+(gather-start t1)
 
-(pp/pprint t1)
-(defn build-down-tree [defs start-color]
-  { :color start-color :num 1 :children (map) }
-  )
+(defn children-is-completed? [completed v]
+  (let [ks (keys v)]
+    (every? #(completed %) ks)))
 
-(build-down-tree t1 end-color)
+(defn calc-children [completed children]
+  (let [subtrees (map (fn [[k v]] (* v (completed k))) children)]
+    (+ 1 (sum subtrees)) ))
+(gather-complete t1 (gather-start t1))
+
+(defn gather-complete [defs completed]
+  (reduce-kv
+   (fn [acc k v]
+     (cond
+       (completed k) acc
+       (children-is-completed? completed v) (assoc acc k (calc-children acc v))
+       :else acc))
+   completed
+   defs))
+
+; (gather-complete t1 (gather-start t1))
+
+(defn get-end [defs]
+  (let [start (gather-start defs)
+        gather (fn [x] (gather-complete defs x))]
+    (some end-color (iterate gather start))
+    ))
 
 (defn part2 [input]
-  (sum (map (fn [in] (count (reduce (fn [acc item] (st/intersection acc item)) (map set in))))  input)))
+  ; Don't include the end bag itself in the count
+  (dec (get-end input)))
 
+; (part2 t1)
 ; (part2 input)
 
 ; (prn (time (part2 input)))
