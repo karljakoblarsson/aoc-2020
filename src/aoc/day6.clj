@@ -42,7 +42,7 @@
 (defn part2 [input]
   (sum (map (fn [in] (count (reduce (fn [acc item] (st/intersection acc item)) (map set in))))  input)))
 
-(part2 t1)
+; (part2 input)
 
 ; (prn (time (part2 input)))
 ; (part2 input)
