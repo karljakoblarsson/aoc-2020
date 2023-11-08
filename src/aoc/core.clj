@@ -23,7 +23,7 @@
   (remove #(every? empty? %) (partition-by empty? lst))
   )
 
-(defn parse-int [s] (Integer/parseInt s))
+(defn parse-int [s] (Long/parseLong s))
 
 (defn parse-double [s] (Double/parseDouble s))
 (def parse-float parse-double)
