@@ -25,5 +25,5 @@
 
 (defn parse-int [s] (Long/parseLong s))
 
-(defn parse-double [s] (Double/parseDouble s))
-(def parse-float parse-double)
+(defn parse-float [s] (Double/parseDouble s))
+; (def parse-float parse-double)
